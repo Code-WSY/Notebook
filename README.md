@@ -62,6 +62,7 @@ Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面
   - `sudo usermod -d 新主目录 -m 用户名`：
 - `deluser`：删除用户
   - `sudo deluser --remove-home 用户名`：删除用户的主目录和邮件目录
+  - `sudo userdel [用户名]`：删除用户账户，但不会删除用户的主目录。
 
 ## 配置文件
 
