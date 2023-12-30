@@ -1,4 +1,4 @@
-# Linux(Ubuntu)基本命令指南（待更新）
+# Linux基本命令指南
 
 Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面系统。本指南旨在介绍一些常用的Ubuntu命令。
 
@@ -42,6 +42,103 @@ Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面
 - `sudo apt install [包名]`：安装软件包。
 - `sudo apt remove [包名]`：卸载软件包。
 
+### 1. 软件包管理系统
+
+Linux 分发版通常使用以下软件包管理系统之一：
+
+- **Debian/Ubuntu**: 使用 `apt` 或 `dpkg`。
+- **Fedora/RHEL/CentOS**: 使用 `yum` 或 `dnf`。
+- **Arch Linux**: 使用 `pacman`。
+
+### 2. 安装软件包
+
+使用包管理工具可以从仓库安装软件包。
+
+- **Debian/Ubuntu**（使用 `apt`）:
+  - 更新软件包列表：`sudo apt update`
+  - 安装软件包：`sudo apt install 包名`
+- **Fedora/RHEL/CentOS**（使用 `dnf` 或 `yum`）:
+  - 更新软件包列表：`sudo dnf check-update`（`yum` 使用 `sudo yum check-update`）
+  - 安装软件包：`sudo dnf install 包名`（`yum` 使用 `sudo yum install 包名`）
+- **Arch Linux**（使用 `pacman`）:
+  - 更新软件包列表并升级所有包：`sudo pacman -Syu`
+  - 安装软件包：`sudo pacman -S 包名`
+
+### 3. 管理软件包
+
+包括升级、卸载和清理软件包。
+
+- **升级软件包**:
+  - Debian/Ubuntu：`sudo apt upgrade`
+  - Fedora/RHEL/CentOS：`sudo dnf upgrade`（`yum` 使用 `sudo yum update`）
+  - Arch Linux：`sudo pacman -Syu`
+- **卸载软件包**:
+  - Debian/Ubuntu：`sudo apt remove 包名`
+  - Fedora/RHEL/CentOS：`sudo dnf remove 包名`（`yum` 使用 `sudo yum remove 包名`）
+  - Arch Linux：`sudo pacman -R 包名`
+- **清理缓存**:
+  - Debian/Ubuntu：`sudo apt clean`
+  - Fedora/RHEL/CentOS：`sudo dnf clean all`（`yum` 使用 `sudo yum clean all`）
+  - Arch Linux：`sudo pacman -Sc`
+
+### 4. 镜像源的设置与管理
+
+修改软件源可以加速软件包的下载速度，特别是选择地理位置较近的镜像源。
+
+- **修改镜像源**:
+
+  - Debian/Ubuntu：编辑 `/etc/apt/sources.list` 文件。
+  - Fedora/RHEL/CentOS：编辑 `/etc/yum.repos.d/` 或 `/etc/dnf/dnf.conf` 中的仓库文件。
+  - Arch Linux：编辑 `/etc/pacman.d/mirrorlist` 文件。
+
+- **示例**：更换 Ubuntu 的镜像源
+
+  ```bash
+  sudo vim /etc/apt/sources.list
+  # 添加或修改为新的镜像源地址
+  
+  ```
+
+  格式大致如下：
+
+  ```bash
+  # 默认的 Ubuntu 仓库
+  deb http://us.archive.ubuntu.com/ubuntu/ focal main restricted
+  deb http://us.archive.ubuntu.com/ubuntu/ focal-updates main restricted
+  deb http://us.archive.ubuntu.com/ubuntu/ focal universe
+  deb http://us.archive.ubuntu.com/ubuntu/ focal-updates universe
+  deb http://us.archive.ubuntu.com/ubuntu/ focal multiverse
+  deb http://us.archive.ubuntu.com/ubuntu/ focal-updates multiverse
+  deb http://us.archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse
+  
+  # 安全更新
+  deb http://security.ubuntu.com/ubuntu focal-security main restricted
+  deb http://security.ubuntu.com/ubuntu focal-security universe
+  deb http://security.ubuntu.com/ubuntu focal-security multiverse
+  
+  # 可选：添加第三方软件仓库
+  # deb http://example.com/ubuntu focal main
+  ```
+
+  **修改格式：**
+
+  将`us.archive.ubuntu.com` 和 `security.ubuntu.com` 等地址替换为您选择的镜像源地址。
+
+  例如，使用清华大学的镜像源，您可以将`us.archive.ubuntu.com` 替换`mirrors.tuna.tsinghua.edu.cn`。
+
+  更新软件包列表：
+
+  ```shell
+  sudo apt update
+  ```
+
+### 5. 注意事项
+
+- 在修改镜像源前，最好备份原始的 `sources.list` 文件。
+- 选择靠近您地理位置的镜像源，可以加快下载速度。
+- 确保所选的镜像源支持您的 Ubuntu 版本。
+- 修改镜像源后，执行 `sudo apt update` 来更新软件包列表是必须的。
+
 ## 系统管理
 
 - `top` 或 `htop`：显示当前运行的进程及其资源占用情况。
@@ -49,6 +146,71 @@ Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面
 - `free -m`：显示内存使用情况。
 - `lsblk`：用于列出所有可用的块设备，包括它们的大小、类型、挂载点等信息。这个命令显示的是设备级别的信息，可以让您看到整个系统的磁盘和分区情况。
 - `fdisk -l`：（列出分区表）提供了关于磁盘分区的详细信息，包括每个分区的总容量。这个命令需要管理员权限。
+
+## 进程管理
+
+### 1. 查看进程
+
+使用以下命令可以查看在 Linux 系统上运行的进程：
+
+- `ps aux`: 显示所有运行中的进程。
+- `top` / `htop`: 提供实时的进程监控视图。
+
+#### 进程参数
+
+在 Linux 系统中使用 `ps aux` 或类似命令查看进程时，输出的每列参数具有特定的含义：
+
+1. **USER**: 进程所属的用户名称。这显示了哪个用户启动了该进程。
+2. **PID**: Process ID（进程标识符）。这是一个唯一的数字，用于标识系统中的每个进程。
+3. **%CPU**: 进程使用的 CPU 百分比。表示该进程占用的 CPU 时间与总可用 CPU 时间的比例。
+4. **%MEM**: 进程使用的内存百分比。表示该进程占用的物理内存与总物理内存的比例。
+5. **VSZ**: Virtual Memory Size（虚拟内存大小），单位是 KB。表示该进程已分配的虚拟内存总量，包括所有的代码、数据和共享库加上交换空间。
+6. **RSS**: Resident Set Size（常驻集大小），单位是 KB。这是该进程当前占用的物理内存大小，不包括交换出去的内存部分。
+7. **TTY**: 终端类型。这列显示了与进程关联的终端（如 pts/0）。如果显示为 '?'，则表示进程没有关联的终端。
+8. **STAT**: 进程状态。这个字段显示了进程的状态，如运行（R）、休眠（S）、停止（T）等。
+9. **START**: 进程启动时的时间。这表示进程开始运行的时间。
+10. **TIME**: 进程使用的累计 CPU 时间，通常以分:秒的格式显示。
+11. **COMMAND**: 启动进程的命令名或命令行。显示了用于启动进程的命令及其参数。
+
+### 2. 进程状态
+
+`ps` 命令会展示不同的进程状态，每个状态代表不同的含义：
+
+| 状态 | 描述                                          |
+| ---- | --------------------------------------------- |
+| R    | Running - 进程正在运行或等待运行              |
+| S    | Sleeping - 进程处于休眠状态                   |
+| T    | Stopped - 进程已被停止                        |
+| I    | Idle - 内核级线程的闲置状态                   |
+| Z    | Zombie - 僵尸进程，已结束但未被父进程回收     |
+| D    | Uninterruptible Sleep - 不可中断的休眠状态    |
+| Ss   | Session Leader - 会话领导者且处于休眠状态     |
+| <    | High-priority - 高优先级进程                  |
+| N    | Low-priority - 低优先级进程                   |
+| L    | Pages Locked - 进程的部分或全部页被锁定在内存 |
+| s    | Session Leader - 会话的领导者                 |
+| l    | Multi-threaded - 多线程进程                   |
+| +    | Foreground - 属于前台进程组                   |
+
+### 3. 管理进程
+
+进程管理主要涉及结束或控制进程的执行：
+
+- **结束进程**：
+  - `kill [进程ID]`: 发送 SIGTERM 信号以优雅地结束进程。
+  - `killall [进程名称]`: 结束所有名为指定名称的进程。
+  - `pkill [模式]`: 根据模式匹配结束进程。
+- **控制进程**：
+  - `nice` / `renice`: 调整进程的优先级。
+  - `bg`: 将一个停止的进程放到后台继续运行。
+  - `fg`: 将一个后台进程放到前台继续运行。
+- **查找进程**：
+  - `pgrep [模式]`: 根据模式匹配查找进程。
+
+### 4. 注意事项
+
+- 在结束重要进程前，确认进程的功能和重要性。
+- 对于系统进程和关键服务，谨慎操作以防止系统不稳定。
 
 ## 储存管理
 
@@ -84,6 +246,64 @@ Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面
   - `sudo deluser --remove-home 用户名`：删除用户的主目录和邮件目录
   - `sudo userdel [用户名]`：删除用户账户，但不会删除用户的主目录。
 
+## 权限管理
+
+### 1. Linux 默认的权限配置
+
+Linux 系统中的权限主要分为三类：用户（u）、组（g）和其他（o）。每个文件或目录都有与之关联的权限，决定了用户对这些文件或目录的访问能力。
+
+- **权限类型**：
+  - **读（r）**：允许读取文件内容或列出目录内容。
+  - **写（w）**：允许修改文件内容或目录中的文件。
+  - **执行（x）**：允许执行文件或搜索目录。
+- **文件和目录**：
+  - 文件的权限直接影响其可读写和执行性。
+  - 目录的权限影响能否列出、访问、添加、删除其内部的文件。
+
+### 2. 查看权限
+
+使用 `ls -l` 命令可以查看文件或目录的权限。
+
+- 示例
+
+  ```shell
+  ls -l filename
+  ```
+
+### 3. 修改权限
+
+权限可以通过 `chmod` 命令来修改。
+
+- **使用符号方式修改权限**：
+  - 格式：`chmod [u/g/o/a][+-=][r/w/x] 文件名`
+  - `u` 代表用户，`g` 代表组，`o` 代表其他，`a` 代表所有。
+  - `+` 表示添加权限，`-` 表示移除权限，`=` 表示设置精确权限。
+  - **示例**：给用户添加执行权限 `chmod u+x filename`
+- **使用数值方式修改权限**：
+  - 权限的数值表示：读（4）、写（2）、执行（1）。
+  - 各类用户的权限通过相加得到一个三位数。
+  - **示例**：设置文件所有者可读写执行（7），组可读执行（5），其他可执行（1）的权限 `chmod 751 filename`
+
+### 4. 修改所有权
+
+- 使用 `chown` 修改文件或目录的所有者。
+- 使用 `chgrp` 修改文件或目录的所属组。
+- **示例**：
+  - 改变文件所有者：`chown newowner filename`
+  - 改变文件所属组：`chgrp newgroup filename`
+
+### 5. 特殊权限
+
+- **SUID**：设置用户ID。当执行该文件时，进程将具有文件所有者的权限。
+- **SGID**：设置组ID。对于文件，执行时将具有文件组的权限；对于目录，新建的文件将继承该目录的组。
+- **Sticky Bit**：通常用于目录，防止用户删除不属于他们的文件。
+- **示例**：设置 SUID `chmod u+s filename`
+
+### 6. 注意事项
+
+- 在修改重要文件或目录权限时应特别小心，错误的权限设置可能导致安全问题或功能异常。
+- 对于系统关键目录（如 `/etc`、`/bin` 等），最好不要更改其默认权限。
+
 ## 配置文件
 
 在Linux系统中，开机或用户登录时会执行的配置文件。
@@ -118,7 +338,6 @@ Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面
 
    这是针对所有Bash交互式非登录shell的全局配置文件。它在每次新打开的非登录Bash shell中执行，适用于设置shell选项和别名。对于非登录shell（如打开新的终端窗口），这个文件会被读取。
 
-   
 
 ### 用户级别（用户登录时执行）
 
@@ -151,7 +370,7 @@ Ubuntu是一个基于Debian的Linux操作系统，广泛用于服务器和桌面
 
 ## 文件目录
 
-![Linux系统文件目录](http://sy0316.oss-cn-hangzhou.aliyuncs.com/img/image-20231227162728608.png)
+<img src="http://sy0316.oss-cn-hangzhou.aliyuncs.com/img/image-20231227162728608.png" alt="Linux系统文件目录" style="zoom:67%;" />
 
 | 文件夹                     | 描述                                                         |
 | -------------------------- | ------------------------------------------------------------ |
