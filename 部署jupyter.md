@@ -24,9 +24,10 @@ Verify password: ****
 
 密码会保存至 `~/.jupyter/jupyter_server_config.json` 文件，其他配置信息也可以在上面进行输入。
 
-注意，大部分教程中，对于将密码转为哈希密码依旧是用的`notebook.auth`模块，
+注意：
 
-**但在新版本中已经转到了`jupyter_server.auth`模块中：**
+1. `jupyter_server_config.json`是jupyter的通用服务配置，`jupyter_notebook_config.json`是针对notebook的配置，jupyter_notebook_config.py可通过`jupyter notebook --generate-config`可以进行更加灵活的notebook配置，还有`jupyter_server_config.py`是jupyter的通用服务配置的灵活形式。
+2. 大部分教程中，对于将密码转为哈希密码依旧是用的`notebook.auth`模块，**但在新版本中已经转到了`jupyter_server.auth`模块中：**
 
 ```python
 (jupyter_web) jupyter@suyunubuntu:~/wsy$ ipython
@@ -34,7 +35,6 @@ In [1]: from jupyter_server.auth import passwd
 In [2]: passwd()
 Enter password:  *** #输入你的密码
 Verify password: *** #输入你的密码
-Out[2]: 'argon2:$argon2id$v=19$m=10240,t=10,p=8$ZBADGlxKb/l2h1HR1VaGkw$Jn3R8lt8QaSncyx1norwkMYdtnCLZl0cNYMRk7brWO8'
 ```
 
 官方参考路径：
@@ -56,7 +56,7 @@ Out[2]: 'argon2:$argon2id$v=19$m=10240,t=10,p=8$ZBADGlxKb/l2h1HR1VaGkw$Jn3R8lt8Q
 c.ServerApp.port = 8888
 ```
 
-`JSON`中的相同配置如下所示：
+`JSON`文件（`jupyter_server_config.json`）中的相同配置如下所示：
 
 ```json
 {
@@ -82,15 +82,18 @@ c.ServerApp.port = 8888
 
 端口默认是8888，但是需要确认该端口是否开放。
 
-还可以设置根目录地址：
+还可以设置根目录地址（`jupyter_notebook_config.json`）：
 
 ```json
   {
   "NotebookApp": {
-    "notebook_dir":"你希望设置的更目录地址"
+    "notebook_dir":"你希望设置的更目录地址",
+      "port":9999
   }
   }
 ```
+
+- `jupyter lab`是在8888端口运行，`jupyter notebook`是在9999端口运行。
 
 ## 后台运行
 
